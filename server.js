@@ -11,6 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 //parse incoming JSON data
 app.use(express.json());
 
+app.use(express.static('public'));
+
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
     //note that we save the animalsArray as filtered results here:
@@ -82,10 +84,6 @@ function validateAnimal(animal){
     return true;
 };
 
-app.get('/', (req, res) => {
-    res.send(`Welcome to the Zoo.`)
-});
-
 app.get('/api/animals', (req, res) => {
     let results = animals;
     if(req.query){
@@ -117,6 +115,22 @@ app.post('/api/animals', (req, res) => {
 
         res.json(animal);
     }
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 app.listen(PORT, () => {
